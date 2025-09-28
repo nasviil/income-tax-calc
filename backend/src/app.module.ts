@@ -26,6 +26,7 @@ import { DatabaseModule } from './database/database.module';
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forFeature([Employee, TaxBracket]),
     DatabaseModule,
   ],
   controllers: [AppController],
