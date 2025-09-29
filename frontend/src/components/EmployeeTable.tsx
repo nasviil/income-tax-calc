@@ -3,14 +3,18 @@ import { Employee } from '@/types';
 interface EmployeeTableProps {
   employees: Employee[];
   onDeleteEmployee: (id: number) => void;
+  onEditEmployee: (employee: Employee) => void;
 }
 
-export default function EmployeeTable({ employees, onDeleteEmployee }: EmployeeTableProps) {
+export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmployee }: EmployeeTableProps) {
   const handleDelete = (employeeId: number, employeeName: string) => {
     if (confirm(`Are you sure you want to delete ${employeeName}?`)) {
       onDeleteEmployee(employeeId);
     }
   };
+
+  // Sort employees by ID in descending order (newest first, ID 1 at bottom)
+  const sortedEmployees = [...employees].sort((a, b) => b.id - a.id);
 
   return (
     <div className="bg-white shadow-lg rounded-lg mb-8 overflow-hidden">
@@ -25,10 +29,10 @@ export default function EmployeeTable({ employees, onDeleteEmployee }: EmployeeT
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
+              <th className="px-12 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                 Monthly Salary
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
+              <th className="px-12 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                 Annual Salary
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
@@ -45,26 +49,34 @@ export default function EmployeeTable({ employees, onDeleteEmployee }: EmployeeT
                 </td>
               </tr>
             ) : (
-              employees.map((employee) => (
+              sortedEmployees.map((employee) => (
                 <tr key={employee.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="font-medium text-gray-900">
                       {employee.firstName} {employee.lastName}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-700">
+                  <td className="px-12 py-4 whitespace-nowrap text-gray-700">
                     ₱{employee.monthlySalary.toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-700">
+                  <td className="px-12 py-4 whitespace-nowrap text-gray-700">
                     ₱{(employee.monthlySalary * 12).toLocaleString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <button
-                      onClick={() => handleDelete(employee.id, `${employee.firstName} ${employee.lastName}`)}
-                      className="text-red-600 hover:text-red-900 font-medium transition-colors"
-                    >
-                      Delete
-                    </button>
+                    <div className="flex gap-10">
+                      <button
+                        onClick={() => onEditEmployee(employee)}
+                        className="text-blue-600 hover:text-blue-900 font-medium transition-colors"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(employee.id, `${employee.firstName} ${employee.lastName}`)}
+                        className="text-red-600 hover:text-red-900 font-medium transition-colors"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
