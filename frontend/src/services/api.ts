@@ -27,6 +27,19 @@ export const employeeService = {
     return await response.json();
   },
 
+  async update(id: number, employeeData: Omit<Employee, 'id'>): Promise<Employee> {
+    const response = await fetch(`${API_BASE_URL}/employees/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(employeeData),
+    });
+    
+    if (!response.ok) throw new Error('Failed to update employee');
+    return await response.json();
+  },
+
   async delete(id: number): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/employees/${id}`, {
       method: 'DELETE',
