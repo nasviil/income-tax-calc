@@ -14,24 +14,24 @@ export default function EmployeeTable({ employees, onDeleteEmployee }: EmployeeT
 
   return (
     <div className="bg-white shadow-lg rounded-lg mb-8 overflow-hidden">
-      <div className="bg-gray-50 px-6 py-4 border-b">
-        <h2 className="text-2xl font-semibold">Employees ({employees.length})</h2>
+      <div className="bg-gray-200 px-6 py-4 border-b">
+        <h2 className="text-2xl text-black font-semibold">Employees ({employees.length})</h2>
       </div>
       
       <div className="overflow-x-auto">
         <table className="min-w-full">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-200 ">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                 Monthly Salary
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                 Annual Salary
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
