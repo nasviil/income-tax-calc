@@ -70,10 +70,19 @@ export class TaxBracketSeeder {
     ];
 
     try {
+      console.log('💾 Seeding tax brackets:', taxBrackets.length, 'brackets');
+      console.log('💾 Tax bracket data:', taxBrackets.map(b => ({
+        name: b.bracketName,
+        rate: b.rate,
+        baseTax: b.baseTax,
+        rateType: typeof b.rate,
+        baseTaxType: typeof b.baseTax
+      })));
+      
       await this.taxBracketRepository.save(taxBrackets);
-      console.log('Tax brackets seeded successfully');
+      console.log('✅ Tax brackets seeded successfully');
     } catch (error) {
-      console.error('Error seeding tax brackets:', error);
+      console.error('❌ Error seeding tax brackets:', error);
     }
   }
 }
