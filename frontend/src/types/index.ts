@@ -15,11 +15,10 @@ export interface TaxBracket {
 }
 
 export interface TaxResult {
+  monthlySalary: number;
   annualSalary: number;
-  taxableIncome: number;
   annualTax: number;
-  monthlyTax: number;
-  netMonthlySalary: number;
+  netAnnualSalary: number;
   taxBracket: string;
 }
 
