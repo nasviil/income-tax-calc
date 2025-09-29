@@ -5,6 +5,7 @@ import {
   EmployeeTable, 
   TaxBracketsTable, 
   AddEmployeeModal, 
+  EditEmployeeModal,
   TaxCalculatorModal 
 } from '@/components';
 import { employeeService, taxService } from '@/services/api';
@@ -14,6 +15,8 @@ export default function Home() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [taxBrackets, setTaxBrackets] = useState<TaxBracket[]>([]);
   const [showAddEmployeeModal, setShowAddEmployeeModal] = useState(false);
+  const [showEditEmployeeModal, setShowEditEmployeeModal] = useState(false);
+  const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
   const [showCalculatorModal, setShowCalculatorModal] = useState(false);
 
   // Fetch data on component mount
@@ -39,6 +42,22 @@ export default function Home() {
       monthlySalary: parseFloat(employeeData.monthlySalary)
     });
     await loadEmployees();
+  };
+
+  const handleEditEmployee = (employee: Employee) => {
+    setEditingEmployee(employee);
+    setShowEditEmployeeModal(true);
+  };
+
+  const handleUpdateEmployee = async (employeeId: number, employeeData: EmployeeFormData) => {
+    await employeeService.update(employeeId, {
+      firstName: employeeData.firstName,
+      lastName: employeeData.lastName,
+      monthlySalary: parseFloat(employeeData.monthlySalary)
+    });
+    await loadEmployees();
+    setShowEditEmployeeModal(false);
+    setEditingEmployee(null);
   };
 
   const handleDeleteEmployee = async (employeeId: number) => {
@@ -77,7 +96,8 @@ export default function Home() {
       {/* Components */}
       <EmployeeTable 
         employees={employees} 
-        onDeleteEmployee={handleDeleteEmployee} 
+        onDeleteEmployee={handleDeleteEmployee}
+        onEditEmployee={handleEditEmployee}
       />
       
       <TaxBracketsTable taxBrackets={taxBrackets} />
@@ -87,6 +107,13 @@ export default function Home() {
         isOpen={showAddEmployeeModal}
         onClose={() => setShowAddEmployeeModal(false)}
         onSubmit={handleAddEmployee}
+      />
+
+      <EditEmployeeModal
+        isOpen={showEditEmployeeModal}
+        onClose={() => setShowEditEmployeeModal(false)}
+        onSubmit={handleUpdateEmployee}
+        employee={editingEmployee}
       />
 
       <TaxCalculatorModal
