@@ -42,10 +42,10 @@ export default function TaxCalculatorModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={handleClose}>
+      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="p-6">
-          <h2 className="text-2xl font-bold mb-4">Tax Calculator</h2>
+          <h2 className="text-2xl text-black font-bold mb-4">Tax Calculator</h2>
           
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -76,41 +76,40 @@ export default function TaxCalculatorModal({
 
           {taxResult && (
             <div className="border-t pt-6">
-              <h3 className="text-xl font-bold mb-4">Tax Calculation Result</h3>
+              <h3 className="text-xl text-neutral-800 font-bold mb-4">Tax Calculation Result</h3>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-blue-800">Annual Salary</h4>
+                  <h4 className="font-semibold text-blue-800">Monthly Salary</h4>
                   <p className="text-2xl font-bold text-blue-600">
-                    ₱{taxResult.annualSalary.toLocaleString()}
+                    ₱{(taxResult.monthlySalary || 0).toLocaleString()}
+                  </p>
+                </div>
+                
+                <div className="bg-purple-50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-purple-800">Annual Salary</h4>
+                  <p className="text-2xl font-bold text-purple-600">
+                    ₱{(taxResult.annualSalary || 0).toLocaleString()}
                   </p>
                 </div>
                 
                 <div className="bg-red-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-red-800">Annual Tax</h4>
                   <p className="text-2xl font-bold text-red-600">
-                    ₱{taxResult.annualTax.toLocaleString()}
-                  </p>
-                </div>
-                
-                <div className="bg-orange-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-orange-800">Monthly Tax</h4>
-                  <p className="text-2xl font-bold text-orange-600">
-                    ₱{taxResult.monthlyTax.toLocaleString()}
+                    ₱{(taxResult.annualTax || 0).toLocaleString()}
                   </p>
                 </div>
                 
                 <div className="bg-green-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-green-800">Net Monthly Salary</h4>
+                  <h4 className="font-semibold text-green-800">Net Annual Salary</h4>
                   <p className="text-2xl font-bold text-green-600">
-                    ₱{taxResult.netMonthlySalary.toLocaleString()}
+                    ₱{(taxResult.netAnnualSalary || 0).toLocaleString()}
                   </p>
                 </div>
               </div>
               
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p><strong>Tax Bracket:</strong> {taxResult.taxBracket}</p>
-                <p><strong>Taxable Income:</strong> ₱{taxResult.taxableIncome.toLocaleString()}</p>
+                <p className="font-bold text-black"><strong className="text-gray-800 font-medium">Tax Bracket:</strong> {taxResult.taxBracket || 'Unknown'}</p>
               </div>
             </div>
           )}
