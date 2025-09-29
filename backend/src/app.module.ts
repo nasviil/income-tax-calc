@@ -6,6 +6,8 @@ import { AppService } from './app.service';
 import { Employee } from './entities/employee.entity';
 import { TaxBracket } from './entities/tax-bracket.entity';
 import { DatabaseModule } from './database/database.module';
+import { EmployeeController } from './controllers/employee.controller';
+import { TaxController } from './controllers/tax.controller';
 
 @Module({
   imports: [
@@ -29,7 +31,7 @@ import { DatabaseModule } from './database/database.module';
     TypeOrmModule.forFeature([Employee, TaxBracket]),
     DatabaseModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, EmployeeController, TaxController],
   providers: [AppService],
 })
 export class AppModule {}
