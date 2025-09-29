@@ -16,24 +16,24 @@ export default function TaxBracketsTable({ taxBrackets }: TaxBracketsTableProps)
 
   return (
     <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-      <div className="bg-gray-50 px-6 py-4 border-b">
-        <h2 className="text-2xl font-semibold">Philippine Income Tax Brackets</h2>
+      <div className="bg-gray-200 px-6 py-4 border-b">
+        <h2 className="text-2xl font-semibold text-black">Philippine Income Tax Brackets</h2>
       </div>
       
       <div className="overflow-x-auto">
         <table className="min-w-full">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-200 text-black">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                 Bracket
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                 Income Range
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                 Tax Rate
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                 Base Tax
               </th>
             </tr>
