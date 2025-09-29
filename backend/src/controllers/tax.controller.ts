@@ -94,18 +94,11 @@ export class TaxController {
     console.log('🧮 Rate (converted):', rate);
     console.log('🧮 Min Income (converted):', minIncome);
     
-    // Define the correct base amounts for excess calculation
-    // The excess should be calculated from these thresholds, not minIncome
     const getExcessThreshold = (bracketName: string): number => {
-      switch (bracketName) {
-        case 'Tax Exempt': return 0;
-        case '15% Bracket': return 250000;  // Excess over 250,000
-        case '20% Bracket': return 400000;  // Excess over 400,000
-        case '25% Bracket': return 800000;  // Excess over 800,000
-        case '30% Bracket': return 2000000; // Excess over 2,000,000
-        case '35% Bracket': return 8000000; // Excess over 8,000,000
-        default: return minIncome;
+      if (bracketName === 'Tax Exempt') {
+        return 0;
       }
+      return minIncome - 1;  // For all other brackets, use minIncome - 1
     };
     
     const excessThreshold = getExcessThreshold(applicableBracket.bracketName);

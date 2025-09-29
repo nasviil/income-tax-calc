@@ -9,10 +9,10 @@ interface TaxCalculatorModalProps {
 }
 
 export default function TaxCalculatorModal({ 
-  isOpen, 
-  onClose, 
-  employees, 
-  onCalculateTax 
+  isOpen,
+  onClose,
+  employees,
+  onCalculateTax
 }: TaxCalculatorModalProps) {
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
   const [taxResult, setTaxResult] = useState<TaxResult | null>(null);
@@ -114,7 +114,7 @@ export default function TaxCalculatorModal({
             </div>
           )}
           
-          <div className="mt-6 pt-6 border-t">
+          <div className="mt-4 pt-4 border-t">
             <button
               onClick={handleClose}
               disabled={isCalculating}
