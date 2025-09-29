@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Employee } from '../entities/employee.entity';
 import { CreateEmployeeDto } from '../dto/create-employee.dto';
+import { UpdateEmployeeDto } from '../dto/update-employee.dto';
 
 @Controller('employees')
 export class EmployeeController {
@@ -37,6 +38,25 @@ export class EmployeeController {
     
     console.log('✅ Employee created:', savedEmployee);
     return savedEmployee;
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() updateEmployeeDto: UpdateEmployeeDto): Promise<Employee> {
+    console.log('✏️ Updating employee with ID:', id);
+    console.log('✏️ Update data:', updateEmployeeDto);
+    
+    const employee = await this.employeeRepository.findOne({ where: { id: +id } });
+    if (!employee) {
+      console.log('❌ Employee not found for update');
+      throw new Error('Employee not found');
+    }
+
+    // Update only provided fields
+    Object.assign(employee, updateEmployeeDto);
+    
+    const updatedEmployee = await this.employeeRepository.save(employee);
+    console.log('✅ Employee updated successfully:', updatedEmployee);
+    return updatedEmployee;
   }
 
   @Delete(':id')
