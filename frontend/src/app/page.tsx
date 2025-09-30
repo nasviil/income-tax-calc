@@ -70,16 +70,16 @@ export default function Home() {
   };
 
   return (
-    <main className="bg-white container mx-auto p-8 min-h-screen">
-      <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
+    <main className="container min-h-screen p-8 mx-auto bg-white">
+      <h1 className="mb-8 text-4xl font-bold text-center text-gray-800">
         Philippine Income Tax Calculator
       </h1>
       
       {/* Action Buttons */}
-      <div className="flex flex-wrap gap-4 mb-8 justify-center">
+      <div className="flex flex-wrap justify-center gap-4 mb-8">
         <button
           onClick={() => setShowAddEmployeeModal(true)}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+          className="px-6 py-3 font-bold text-white transition-colors rounded-lg bg-shamrock-normal hover:bg-shamrock-normal-hover"
         >
           Add Employee
         </button>
@@ -87,7 +87,7 @@ export default function Home() {
         <button
           onClick={() => setShowCalculatorModal(true)}
           disabled={employees.length === 0}
-          className="bg-green-500 hover:bg-green-700 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+          className="px-6 py-3 font-bold text-white transition-colors bg-danube-normal rounded-lg hover:bg-danube-normal-hover disabled:bg-gray-400"
         >
           Calculate Tax
         </button>
