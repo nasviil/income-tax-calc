@@ -1,26 +1,29 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme{
+  --color-text-primary: #080d11;
+  --color-background-primary: #fafcfd;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-shamrock-lightest: #edfcf6;
+  --color-shamrock-light: #d4f7e7;
+  --color-shamrock-light-hover: #adedd4;
+  --color-shamrock-light-active: #77debb;
+  --color-shamrock-normal: #48c9a1;
+  --color-shamrock-normal-hover: #1dac85;
+  --color-shamrock-normal-active: #108b6c;
+  --color-shamrock-dark: #0d6f58;
+  --color-shamrock-dark-hover: #0d5847;
+  --color-shamrock-dark-active: #0c483b;
+  --color-shamrock-darkest: #052922;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  --color-danube-lightest: #e2ecf7;
+  --color-danube-light: #ccddf1;
+  --color-danube-light-hover: #a8c9e8;
+  --color-danube-light-active: #7facdb;
+  --color-danube-normal: #6a96d3;
+  --color-danube-normal-hover: #4d77c3;
+  --color-danube-normal-active: #4364b2;
+  --color-danube-dark: #3b5392;
+  --color-danube-dark-hover: #344774;
+  --color-danube-dark-active: #232d48;
 }
