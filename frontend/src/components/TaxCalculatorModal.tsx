@@ -54,7 +54,7 @@ export default function TaxCalculatorModal({
             <select
               value={selectedEmployeeId}
               onChange={(e) => setSelectedEmployeeId(e.target.value)}
-              className="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-danube-normal-active"
               disabled={isCalculating}
             >
               <option value="">Choose an employee...</option>
@@ -69,7 +69,7 @@ export default function TaxCalculatorModal({
           <button
             onClick={handleCalculate}
             disabled={!selectedEmployeeId || isCalculating}
-            className="bg-green-500 hover:bg-green-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded mb-6 transition-colors"
+            className="bg-danube-normal hover:bg-danube-normal-hover disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded mb-6 transition-colors"
           >
             {isCalculating ? 'Calculating...' : 'Calculate Tax'}
           </button>
@@ -114,11 +114,11 @@ export default function TaxCalculatorModal({
             </div>
           )}
           
-          <div className="mt-4 pt-4 border-t">
+          <div className="mt-4 pt-4 border-t flex justify-end">
             <button
               onClick={handleClose}
               disabled={isCalculating}
-              className="bg-gray-500 hover:bg-gray-700 disabled:bg-gray-300 text-white font-bold py-2 px-4 rounded transition-colors"
+              className="bg-gray-500 hover:bg-gray-600 disabled:bg-gray-300 text-white font-bold py-2 px-4 rounded transition-colors"
             >
               Close
             </button>

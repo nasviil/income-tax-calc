@@ -79,7 +79,7 @@ export default function EditEmployeeModal({ isOpen, onClose, onSubmit, employee 
                 type="text"
                 value={formData.firstName}
                 onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
                 required
                 disabled={isSubmitting}
                 placeholder="Enter first name"
@@ -94,7 +94,7 @@ export default function EditEmployeeModal({ isOpen, onClose, onSubmit, employee 
                 type="text"
                 value={formData.lastName}
                 onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
                 required
                 disabled={isSubmitting}
                 placeholder="Enter last name"
@@ -109,7 +109,7 @@ export default function EditEmployeeModal({ isOpen, onClose, onSubmit, employee 
                 type="number"
                 value={formData.monthlySalary}
                 onChange={(e) => setFormData({ ...formData, monthlySalary: e.target.value })}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
                 required
                 min="0"
                 step="0.01"
