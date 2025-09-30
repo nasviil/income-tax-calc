@@ -59,7 +59,7 @@ export default function AddEmployeeModal({ isOpen, onClose, onSubmit }: AddEmplo
                 type="text"
                 value={formData.firstName}
                 onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
                 required
                 disabled={isSubmitting}
                 placeholder="Enter first name"
@@ -74,7 +74,7 @@ export default function AddEmployeeModal({ isOpen, onClose, onSubmit }: AddEmplo
                 type="text"
                 value={formData.lastName}
                 onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
                 required
                 disabled={isSubmitting}
                 placeholder="Enter last name"
@@ -89,7 +89,7 @@ export default function AddEmployeeModal({ isOpen, onClose, onSubmit }: AddEmplo
                 type="number"
                 value={formData.monthlySalary}
                 onChange={(e) => setFormData({ ...formData, monthlySalary: e.target.value })}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
                 required
                 min="0"
                 step="0.01"
@@ -102,7 +102,7 @@ export default function AddEmployeeModal({ isOpen, onClose, onSubmit }: AddEmplo
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-1 bg-blue-500 hover:bg-blue-700 disabled:bg-blue-300 text-white font-bold py-2 px-4 rounded transition-colors"
+                className="flex-1 bg-shamrock-normal hover:bg-shamrock-normal-hover disabled:bg-blue-300 text-white font-bold py-2 px-4 rounded transition-colors"
               >
                 {isSubmitting ? 'Saving...' : 'Save Employee'}
               </button>
@@ -110,7 +110,7 @@ export default function AddEmployeeModal({ isOpen, onClose, onSubmit }: AddEmplo
                 type="button"
                 onClick={handleClose}
                 disabled={isSubmitting}
-                className="flex-1 bg-gray-500 hover:bg-gray-700 disabled:bg-gray-300 text-white font-bold py-2 px-4 rounded transition-colors"
+                className="flex-1 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-300 text-white font-bold py-2 px-4 rounded transition-colors"
               >
                 Cancel
               </button>
