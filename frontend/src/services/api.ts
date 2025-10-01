@@ -3,7 +3,7 @@ import { Employee, TaxBracket, TaxResult, EmployeeFormData } from '@/types';
 const API_BASE_URL = 'http://localhost:3000';
 
 export const employeeService = {
-  async getAll(page: number = 1, limit: number = 15): Promise<{ 
+  async getAll(page: number = 1, limit: number = 15, search?: string): Promise<{ 
     data: Employee[]; 
     total: number; 
     page: number; 
@@ -11,7 +11,10 @@ export const employeeService = {
     totalPages: number; 
   }> {
     try {
-      const url = `${API_BASE_URL}/employees?page=${page}&limit=${limit}`;
+      let url = `${API_BASE_URL}/employees?page=${page}&limit=${limit}`;
+      if (search && search.trim()) {
+        url += `&search=${encodeURIComponent(search.trim())}`;
+      }
       console.log('📡 Fetching employees from:', url);
       const response = await fetch(url);
       if (!response.ok) throw new Error('Failed to fetch employees');
