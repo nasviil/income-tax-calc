@@ -2,6 +2,7 @@ import { Controller, Get, Post, Delete, Param, Body, ParseIntPipe, HttpException
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AppService } from './app.service';
+import { TaxService } from './services/tax.service';
 import { Employee } from './entities/employee.entity';
 import { TaxBracket } from './entities/tax-bracket.entity';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
@@ -15,6 +16,7 @@ export class AppController {
     private employeeRepository: Repository<Employee>,
     @InjectRepository(TaxBracket)
     private taxBracketRepository: Repository<TaxBracket>,
+    private readonly taxService: TaxService,
   ) {}
 
   @Get()
@@ -30,6 +32,16 @@ export class AppController {
   @Post('employees')
   async createEmployee(@Body() createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
     const employee = this.employeeRepository.create(createEmployeeDto);
+
+    // Calculate tax fields and attach to employee before saving
+    const taxResult = await this.taxService.calculateForEmployee(employee);
+    employee.annualSalary = taxResult.annualSalary;
+    employee.annualTax = taxResult.annualTax;
+    employee.netAnnualSalary = taxResult.netAnnualSalary;
+    if (taxResult.bracket) {
+      employee.taxBracket = taxResult.bracket;
+    }
+
     return await this.employeeRepository.save(employee);
   }
 
