@@ -6,7 +6,8 @@ import {
   TaxBracketsTable, 
   AddEmployeeModal, 
   EditEmployeeModal,
-  TaxCalculatorModal 
+  TaxCalculatorModal,
+  TaxBracketsModal
 } from '@/components';
 import { employeeService, taxService } from '@/services/api';
 import { Employee, TaxBracket, TaxResult, EmployeeFormData } from '@/types';
@@ -18,6 +19,7 @@ export default function Home() {
   const [showEditEmployeeModal, setShowEditEmployeeModal] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
   const [showCalculatorModal, setShowCalculatorModal] = useState(false);
+  const [showTaxBracketsModal, setShowTaxBracketsModal] = useState(false);
 
   // Fetch data on component mount
   useEffect(() => {
@@ -74,15 +76,20 @@ export default function Home() {
       <h1 className="mb-8 text-4xl font-bold text-center text-gray-800">
         Philippine Income Tax Calculator
       </h1>
-      
       {/* Action Buttons */}
       <div className="flex flex-wrap justify-center gap-4 mb-8">
         <button
+          onClick={() => setShowTaxBracketsModal(true)}
+          className="px-6 py-3 font-bold text-white transition-colors rounded-lg bg-danube-normal hover:bg-danube-normal-hover"
+        >
+          Income Tax Info
+        </button>
+        {/* <button
           onClick={() => setShowAddEmployeeModal(true)}
           className="px-6 py-3 font-bold text-white transition-colors rounded-lg bg-shamrock-normal hover:bg-shamrock-normal-hover"
         >
           Add Employee
-        </button>
+        </button> */}
         
         <button
           onClick={() => setShowCalculatorModal(true)}
@@ -98,9 +105,15 @@ export default function Home() {
         employees={employees} 
         onDeleteEmployee={handleDeleteEmployee}
         onEditEmployee={handleEditEmployee}
+        onAddEmployee={() => setShowAddEmployeeModal(true)}
       />
-      
-      <TaxBracketsTable taxBrackets={taxBrackets} />
+
+      {/* Tax brackets modal */}
+      <TaxBracketsModal
+        isOpen={showTaxBracketsModal}
+        onClose={() => setShowTaxBracketsModal(false)}
+        taxBrackets={taxBrackets}
+      />
 
       {/* Modals */}
       <AddEmployeeModal
