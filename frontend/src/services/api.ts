@@ -1,6 +1,6 @@
 import { Employee, TaxBracket, TaxResult, EmployeeFormData } from '@/types';
 
-const API_BASE_URL = 'http://localhost:3000'; // Update this to match your NestJS backend port
+const API_BASE_URL = 'http://localhost:3000';
 
 export const employeeService = {
   async getAll(): Promise<Employee[]> {
