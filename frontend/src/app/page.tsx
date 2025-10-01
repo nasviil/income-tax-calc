@@ -6,7 +6,6 @@ import {
   TaxBracketsTable, 
   AddEmployeeModal, 
   EditEmployeeModal,
-  TaxCalculatorModal,
   TaxBracketsModal
 } from '@/components';
 import { employeeService, taxService } from '@/services/api';
@@ -84,20 +83,6 @@ export default function Home() {
         >
           Income Tax Info
         </button>
-        {/* <button
-          onClick={() => setShowAddEmployeeModal(true)}
-          className="px-6 py-3 font-bold text-white transition-colors rounded-lg bg-shamrock-normal hover:bg-shamrock-normal-hover"
-        >
-          Add Employee
-        </button> */}
-        
-        <button
-          onClick={() => setShowCalculatorModal(true)}
-          disabled={employees.length === 0}
-          className="px-6 py-3 font-bold text-white transition-colors bg-danube-normal rounded-lg hover:bg-danube-normal-hover disabled:bg-gray-400"
-        >
-          Calculate Tax
-        </button>
       </div>
 
       {/* Components */}
@@ -127,13 +112,6 @@ export default function Home() {
         onClose={() => setShowEditEmployeeModal(false)}
         onSubmit={handleUpdateEmployee}
         employee={editingEmployee}
-      />
-
-      <TaxCalculatorModal
-        isOpen={showCalculatorModal}
-        onClose={() => setShowCalculatorModal(false)}
-        employees={employees}
-        onCalculateTax={handleCalculateTax}
       />
     </main>
   );
