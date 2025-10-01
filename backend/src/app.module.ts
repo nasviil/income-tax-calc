@@ -3,11 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TaxService } from './services/tax.service';
 import { Employee } from './entities/employee.entity';
 import { TaxBracket } from './entities/tax-bracket.entity';
 import { DatabaseModule } from './database/database.module';
 import { EmployeeController } from './controllers/employee.controller';
-import { TaxController } from './controllers/tax.controller';
 
 @Module({
   imports: [
@@ -31,7 +31,7 @@ import { TaxController } from './controllers/tax.controller';
     TypeOrmModule.forFeature([Employee, TaxBracket]),
     DatabaseModule,
   ],
-  controllers: [AppController, EmployeeController, TaxController],
-  providers: [AppService],
+  controllers: [AppController, EmployeeController],
+  providers: [AppService, TaxService]
 })
 export class AppModule {}
