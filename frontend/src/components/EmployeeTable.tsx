@@ -7,28 +7,29 @@ interface EmployeeTableProps {
   onDeleteEmployee: (id: number) => void;
   onEditEmployee: (employee: Employee) => void;
   onAddEmployee?: () => void;
+  currentPage: number;
+  totalPages: number;
+  totalEmployees: number;
+  onPageChange: (page: number) => void;
 }
 
-export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmployee, onAddEmployee }: EmployeeTableProps) {
+export default function EmployeeTable({ 
+  employees, 
+  onDeleteEmployee, 
+  onEditEmployee, 
+  onAddEmployee,
+  currentPage,
+  totalPages,
+  totalEmployees,
+  onPageChange
+}: EmployeeTableProps) {
   const [selected, setSelected] = useState<Employee | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const PAGE_SIZE = 15;
   const handleDelete = (employeeId: number, employeeName: string) => {
     if (confirm(`Are you sure you want to delete ${employeeName}?`)) {
       onDeleteEmployee(employeeId);
     }
   };
-
-  // Sort employees by ID in descending order (newest first, ID 1 at bottom)
-  const sortedEmployees = [...employees].sort((a, b) => b.id - a.id);
-  const pageCount = Math.max(1, Math.ceil(sortedEmployees.length / PAGE_SIZE));
-
-  // Clamp current page if employees change
-  if (currentPage > pageCount) setCurrentPage(pageCount);
-
-  const startIndex = (currentPage - 1) * PAGE_SIZE;
-  const pagedEmployees = sortedEmployees.slice(startIndex, startIndex + PAGE_SIZE);
 
   const formatNumber = (value: number | null | undefined) => {
     if (value === null || value === undefined || isNaN(Number(value))) return '-';
@@ -43,7 +44,7 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
   return (
     <div className="mb-8 bg-white rounded-lg shadow-lg max-w-full mx-20">
       <div className="flex justify-between items-center px-6 py-4 bg-gray-200 border-b rounded-t-xl">
-        <h2 className="text-2xl font-semibold text-black">Employees ({employees.length})</h2>
+        <h2 className="text-2xl font-semibold text-black">Employees ({totalEmployees})</h2>
         {onAddEmployee && (
           <button
             onClick={onAddEmployee}
@@ -81,7 +82,7 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
                 </td>
               </tr>
             ) : (
-                pagedEmployees.map((employee) => (
+                employees.map((employee) => (
                   <tr key={employee.id} className="hover:bg-gray-50">
                     <td className="py-4 px-12 text-left whitespace-nowrap">
                       <div className="font-medium text-gray-900">
@@ -125,20 +126,22 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
         </table>
       </div>
       <div className="flex items-center justify-between px-6 py-4">
-        <div className="text-sm text-gray-600">Showing {Math.min(sortedEmployees.length, (currentPage - 1) * PAGE_SIZE + 1)} - {Math.min(sortedEmployees.length, currentPage * PAGE_SIZE)} of {sortedEmployees.length}</div>
+        <div className="text-sm text-gray-600">
+          Showing {employees.length > 0 ? ((currentPage - 1) * 15 + 1) : 0} - {Math.min(totalEmployees, currentPage * 15)} of {totalEmployees}
+        </div>
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="px-3 py-1 rounded bg-gray-300 disabled:opacity-50"
+            onClick={() => onPageChange(currentPage - 1)}
+            disabled={currentPage <= 1}
+            className="px-3 py-1 rounded bg-gray-300 disabled:opacity-50 hover:bg-gray-400 disabled:hover:bg-gray-300"
           >
             Prev
           </button>
-          <div className="text-sm">Page {currentPage} / {pageCount}</div>
+          <div className="text-sm">Page {currentPage} / {Math.max(1, totalPages)}</div>
           <button
-            onClick={() => setCurrentPage(p => Math.min(pageCount, p + 1))}
-            disabled={currentPage === pageCount}
-            className="px-3 py-1 rounded bg-gray-300 disabled:opacity-50"
+            onClick={() => onPageChange(currentPage + 1)}
+            disabled={currentPage >= totalPages || totalPages === 0}
+            className="px-3 py-1 rounded bg-gray-300 disabled:opacity-50 hover:bg-gray-400 disabled:hover:bg-gray-300"
           >
             Next
           </button>
