@@ -54,8 +54,13 @@ export class EmployeeSeeder {
   for (let i = 0; i < (createCount ?? 50); i++) {
       const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
       const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
-      // Monthly salary between 20,000 and 200,000
-      const monthlySalary = +(20000 + Math.random() * (200000 - 20000)).toFixed(2);
+      // Monthly salary between 20,000 and 200,000, in multiples of 500
+      const minSalary = 20000;
+      const maxSalary = 200000;
+      const salaryRange = maxSalary - minSalary;
+      const randomSalary = minSalary + Math.random() * salaryRange;
+      // Round to nearest 500 (no decimals)
+      const monthlySalary = Math.round(randomSalary / 500) * 500;
 
       // Build a plain partial employee object
       const emp: Partial<Employee> = {
