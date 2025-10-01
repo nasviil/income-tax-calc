@@ -11,6 +11,8 @@ interface EmployeeTableProps {
   totalPages: number;
   totalEmployees: number;
   onPageChange: (page: number) => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
 }
 
 export default function EmployeeTable({ 
@@ -21,7 +23,9 @@ export default function EmployeeTable({
   currentPage,
   totalPages,
   totalEmployees,
-  onPageChange
+  onPageChange,
+  searchQuery,
+  onSearchChange
 }: EmployeeTableProps) {
   const [selected, setSelected] = useState<Employee | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -43,8 +47,38 @@ export default function EmployeeTable({
 
   return (
     <div className="mb-8 bg-white rounded-lg shadow-lg max-w-full mx-20">
-      <div className="flex justify-between items-center min-w-full px-6 py-4 bg-gray-200 border-b rounded-t-xl">
+      <div className="min-w-full px-6 py-4 bg-gray-300 border-b rounded-t-xl">
         <h2 className="text-2xl font-semibold text-black">Employees ({totalEmployees})</h2>
+      </div>
+      
+      {/* Search Bar and Add Button */}
+      <div className="flex justify-between items-center px-6 py-4 bg-gray-200 border-b">
+        <div className="max-w-md">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <input
+              type="text"
+              placeholder="Search employees by name..."
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className="block min-w-md pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-shamrock-dark focus:border-shamrock-dark text-sm"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => onSearchChange('')}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+              >
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
         {onAddEmployee && (
           <button
             onClick={onAddEmployee}
@@ -57,7 +91,7 @@ export default function EmployeeTable({
       
       <div className="overflow-x-auto">
         <table className="min-w-full">
-          <thead className="bg-gray-200">
+          <thead className="bg-gray-300">
             <tr>
               <th className="py-3 px-12 text-xs font-medium tracking-wider text-left text-gray-800 uppercase">
                 Name
@@ -77,8 +111,12 @@ export default function EmployeeTable({
               {employees.length === 0 ? (
               <tr>
                 <td colSpan={4} className="px-2 py-8 text-center text-gray-500">
-                  <div className="text-lg">No employees found</div>
-                  <div className="mt-1 text-sm">Add your first employee to get started!</div>
+                  <div className="text-lg">
+                    {searchQuery ? `No employees found matching "${searchQuery}"` : 'No employees found'}
+                  </div>
+                  <div className="mt-1 text-sm">
+                    {searchQuery ? 'Try a different search term or clear the search to see all employees' : 'Add your first employee to get started!'}
+                  </div>
                 </td>
               </tr>
             ) : (
