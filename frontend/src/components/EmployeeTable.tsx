@@ -43,7 +43,7 @@ export default function EmployeeTable({
 
   return (
     <div className="mb-8 bg-white rounded-lg shadow-lg max-w-full mx-20">
-      <div className="flex justify-between items-center px-6 py-4 bg-gray-200 border-b rounded-t-xl">
+      <div className="flex justify-between items-center min-w-full px-6 py-4 bg-gray-200 border-b rounded-t-xl">
         <h2 className="text-2xl font-semibold text-black">Employees ({totalEmployees})</h2>
         {onAddEmployee && (
           <button
@@ -125,7 +125,7 @@ export default function EmployeeTable({
           </tbody>
         </table>
       </div>
-      <div className="flex items-center justify-between px-6 py-4">
+      <div className="flex items-center justify-between min-w-full py-4 px-8">
         <div className="text-sm text-gray-600">
           Showing {employees.length > 0 ? ((currentPage - 1) * 15 + 1) : 0} - {Math.min(totalEmployees, currentPage * 15)} of {totalEmployees}
         </div>
