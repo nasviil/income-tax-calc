@@ -34,6 +34,7 @@ export class EmployeeController {
     
     // Get employees with pagination and total count (newest first)
     const [employees, total] = await this.employeeRepository.findAndCount({
+      relations: ['taxBracket'],
       order: { id: 'DESC' },
       skip,
       take: limit
