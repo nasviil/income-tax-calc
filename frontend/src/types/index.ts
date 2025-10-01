@@ -3,6 +3,9 @@ export interface Employee {
   firstName: string;
   lastName: string;
   monthlySalary: number;
+  annualSalary?: number;
+  annualTax?: number;
+  netAnnualSalary?: number;
 }
 
 export interface TaxBracket {
