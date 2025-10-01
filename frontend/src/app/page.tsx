@@ -79,7 +79,7 @@ export default function Home() {
       <div className="flex flex-wrap justify-center gap-4 mb-8">
         <button
           onClick={() => setShowTaxBracketsModal(true)}
-          className="px-6 py-3 font-bold text-white transition-colors rounded-lg bg-danube-normal hover:bg-danube-normal-hover"
+          className="px-6 py-3 font-bold text-white transition-colors rounded-lg bg-danube-dark hover:bg-danube-dark-hover"
         >
           Income Tax Info
         </button>
