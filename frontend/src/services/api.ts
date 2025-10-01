@@ -81,14 +81,11 @@ export const taxService = {
 
   async calculateTax(employeeId: number): Promise<TaxResult> {
     try {
-      const response = await fetch(`${API_BASE_URL}/calculate-tax/${employeeId}`, {
-        method: 'POST',
-      });
+      const response = await fetch(`${API_BASE_URL}/calculate-tax/${employeeId}`);
       if (!response.ok) throw new Error('Failed to calculate tax');
       return await response.json();
     } catch (error) {
       console.warn('Backend not available, providing fallback tax calculation:', error);
-      // Return a fallback calculation result
       return {
         monthlySalary: 0,
         annualSalary: 0,
