@@ -24,26 +24,27 @@ export default function Home() {
   const [showCalculatorModal, setShowCalculatorModal] = useState(false);
   const [showTaxBracketsModal, setShowTaxBracketsModal] = useState(false);
   
-  // Pagination state from URL
+  // Pagination and search state from URL
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [totalEmployees, setTotalEmployees] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [pageSize] = useState(15);
 
   // Fetch data on component mount
   useEffect(() => {
-    loadEmployees();
+    loadEmployees(1, searchQuery);
     loadTaxBrackets();
   }, []);
 
-  // Load employees when page changes
+  // Load employees when page or search changes
   useEffect(() => {
-    loadEmployees(currentPage);
-  }, [currentPage]);
+    loadEmployees(currentPage, searchQuery);
+  }, [currentPage, searchQuery]);
 
-  const loadEmployees = async (page: number = 1) => {
-    console.log('🔄 Loading employees for page:', page, 'with pageSize:', pageSize);
-    const result = await employeeService.getAll(page, pageSize);
+  const loadEmployees = async (page: number = 1, search?: string) => {
+    console.log('🔄 Loading employees for page:', page, 'with pageSize:', pageSize, 'search:', search);
+    const result = await employeeService.getAll(page, pageSize, search);
     console.log('📊 Received pagination result:', result);
     setEmployees(result.data);
     setTotalEmployees(result.total);
@@ -54,6 +55,20 @@ export default function Home() {
     console.log('🔗 Changing to page:', page);
     const params = new URLSearchParams(searchParams.toString());
     params.set('page', page.toString());
+    router.push(`?${params.toString()}`);
+  };
+
+  const handleSearchChange = (query: string) => {
+    console.log('🔍 Search query changed:', query);
+    setSearchQuery(query);
+    const params = new URLSearchParams(searchParams.toString());
+    if (query.trim()) {
+      params.set('search', query.trim());
+    } else {
+      params.delete('search');
+    }
+    // Reset to page 1 when searching
+    params.set('page', '1');
     router.push(`?${params.toString()}`);
   };
 
@@ -77,7 +92,7 @@ export default function Home() {
       handlePageChange(1);
     } else {
       // We're already on page 1, just reload the employees
-      await loadEmployees(1);
+      await loadEmployees(1, searchQuery);
     }
   };
 
@@ -95,14 +110,14 @@ export default function Home() {
     };
     console.log('🎯 Updating employee with payload:', payload);
     await employeeService.update(employeeId, payload);
-    await loadEmployees(currentPage);
+    await loadEmployees(currentPage, searchQuery);
     setShowEditEmployeeModal(false);
     setEditingEmployee(null);
   };
 
   const handleDeleteEmployee = async (employeeId: number) => {
     await employeeService.delete(employeeId);
-    await loadEmployees(currentPage);
+    await loadEmployees(currentPage, searchQuery);
   };
 
   const handleCalculateTax = async (employeeId: number): Promise<TaxResult> => {
@@ -134,6 +149,8 @@ export default function Home() {
         totalPages={totalPages}
         totalEmployees={totalEmployees}
         onPageChange={handlePageChange}
+        searchQuery={searchQuery}
+        onSearchChange={handleSearchChange}
       />
 
       {/* Tax brackets modal */}
