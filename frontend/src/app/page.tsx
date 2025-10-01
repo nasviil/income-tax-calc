@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { 
   EmployeeTable, 
   TaxBracketsTable, 
@@ -12,6 +13,9 @@ import { employeeService, taxService } from '@/services/api';
 import { Employee, TaxBracket, TaxResult, EmployeeFormData } from '@/types';
 
 export default function Home() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [taxBrackets, setTaxBrackets] = useState<TaxBracket[]>([]);
   const [showAddEmployeeModal, setShowAddEmployeeModal] = useState(false);
@@ -19,6 +23,12 @@ export default function Home() {
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
   const [showCalculatorModal, setShowCalculatorModal] = useState(false);
   const [showTaxBracketsModal, setShowTaxBracketsModal] = useState(false);
+  
+  // Pagination state from URL
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+  const [totalEmployees, setTotalEmployees] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [pageSize] = useState(15);
 
   // Fetch data on component mount
   useEffect(() => {
@@ -26,9 +36,25 @@ export default function Home() {
     loadTaxBrackets();
   }, []);
 
-  const loadEmployees = async () => {
-    const data = await employeeService.getAll();
-    setEmployees(data);
+  // Load employees when page changes
+  useEffect(() => {
+    loadEmployees(currentPage);
+  }, [currentPage]);
+
+  const loadEmployees = async (page: number = 1) => {
+    console.log('🔄 Loading employees for page:', page, 'with pageSize:', pageSize);
+    const result = await employeeService.getAll(page, pageSize);
+    console.log('📊 Received pagination result:', result);
+    setEmployees(result.data);
+    setTotalEmployees(result.total);
+    setTotalPages(result.totalPages);
+  };
+
+  const handlePageChange = (page: number) => {
+    console.log('🔗 Changing to page:', page);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', page.toString());
+    router.push(`?${params.toString()}`);
   };
 
   const loadTaxBrackets = async () => {
@@ -37,12 +63,22 @@ export default function Home() {
   };
 
   const handleAddEmployee = async (employeeData: EmployeeFormData) => {
-    await employeeService.create({
+    console.log('🎯 handleAddEmployee called with:', employeeData);
+    const payload = {
       firstName: employeeData.firstName,
       lastName: employeeData.lastName,
       monthlySalary: parseFloat(employeeData.monthlySalary)
-    });
-    await loadEmployees();
+    };
+    console.log('🎯 Creating employee with payload:', payload);
+    await employeeService.create(payload);
+    
+    // If we're not on page 1, navigate there, otherwise just reload current data
+    if (currentPage !== 1) {
+      handlePageChange(1);
+    } else {
+      // We're already on page 1, just reload the employees
+      await loadEmployees(1);
+    }
   };
 
   const handleEditEmployee = (employee: Employee) => {
@@ -51,19 +87,22 @@ export default function Home() {
   };
 
   const handleUpdateEmployee = async (employeeId: number, employeeData: EmployeeFormData) => {
-    await employeeService.update(employeeId, {
+    console.log('🎯 handleUpdateEmployee called with ID:', employeeId, 'data:', employeeData);
+    const payload = {
       firstName: employeeData.firstName,
       lastName: employeeData.lastName,
       monthlySalary: parseFloat(employeeData.monthlySalary)
-    });
-    await loadEmployees();
+    };
+    console.log('🎯 Updating employee with payload:', payload);
+    await employeeService.update(employeeId, payload);
+    await loadEmployees(currentPage);
     setShowEditEmployeeModal(false);
     setEditingEmployee(null);
   };
 
   const handleDeleteEmployee = async (employeeId: number) => {
     await employeeService.delete(employeeId);
-    await loadEmployees();
+    await loadEmployees(currentPage);
   };
 
   const handleCalculateTax = async (employeeId: number): Promise<TaxResult> => {
@@ -91,6 +130,10 @@ export default function Home() {
         onDeleteEmployee={handleDeleteEmployee}
         onEditEmployee={handleEditEmployee}
         onAddEmployee={() => setShowAddEmployeeModal(true)}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalEmployees={totalEmployees}
+        onPageChange={handlePageChange}
       />
 
       {/* Tax brackets modal */}
