@@ -24,35 +24,6 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get('employees')
-  async getEmployees(): Promise<Employee[]> {
-    return await this.employeeRepository.find();
-  }
-
-  @Post('employees')
-  async createEmployee(@Body() createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
-    const employee = this.employeeRepository.create(createEmployeeDto);
-
-    // Calculate tax fields and attach to employee before saving
-    const taxResult = await this.taxService.calculateForEmployee(employee);
-    employee.annualSalary = taxResult.annualSalary;
-    employee.annualTax = taxResult.annualTax;
-    employee.netAnnualSalary = taxResult.netAnnualSalary;
-    if (taxResult.bracket) {
-      employee.taxBracket = taxResult.bracket;
-    }
-
-    return await this.employeeRepository.save(employee);
-  }
-
-  @Delete('employees/:id')
-  async deleteEmployee(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    const result = await this.employeeRepository.delete(id);
-    if (result.affected === 0) {
-      throw new HttpException('Employee not found', HttpStatus.NOT_FOUND);
-    }
-  }
-
   @Get('tax-brackets')
   async getTaxBrackets(): Promise<TaxBracket[]> {
     return await this.taxBracketRepository.find({
