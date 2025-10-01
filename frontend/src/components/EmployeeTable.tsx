@@ -12,6 +12,8 @@ interface EmployeeTableProps {
 export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmployee, onAddEmployee }: EmployeeTableProps) {
   const [selected, setSelected] = useState<Employee | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 15;
   const handleDelete = (employeeId: number, employeeName: string) => {
     if (confirm(`Are you sure you want to delete ${employeeName}?`)) {
       onDeleteEmployee(employeeId);
@@ -20,6 +22,13 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
 
   // Sort employees by ID in descending order (newest first, ID 1 at bottom)
   const sortedEmployees = [...employees].sort((a, b) => b.id - a.id);
+  const pageCount = Math.max(1, Math.ceil(sortedEmployees.length / PAGE_SIZE));
+
+  // Clamp current page if employees change
+  if (currentPage > pageCount) setCurrentPage(pageCount);
+
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const pagedEmployees = sortedEmployees.slice(startIndex, startIndex + PAGE_SIZE);
 
   const formatNumber = (value: number | null | undefined) => {
     if (value === null || value === undefined || isNaN(Number(value))) return '-';
@@ -72,7 +81,7 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
                 </td>
               </tr>
             ) : (
-                sortedEmployees.map((employee) => (
+                pagedEmployees.map((employee) => (
                   <tr key={employee.id} className="hover:bg-gray-50">
                     <td className="py-4 px-12 text-left whitespace-nowrap">
                       <div className="font-medium text-gray-900">
@@ -114,6 +123,26 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
             )}
           </tbody>
         </table>
+      </div>
+      <div className="flex items-center justify-between px-6 py-4">
+        <div className="text-sm text-gray-600">Showing {Math.min(sortedEmployees.length, (currentPage - 1) * PAGE_SIZE + 1)} - {Math.min(sortedEmployees.length, currentPage * PAGE_SIZE)} of {sortedEmployees.length}</div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1 rounded bg-gray-300 disabled:opacity-50"
+          >
+            Prev
+          </button>
+          <div className="text-sm">Page {currentPage} / {pageCount}</div>
+          <button
+            onClick={() => setCurrentPage(p => Math.min(pageCount, p + 1))}
+            disabled={currentPage === pageCount}
+            className="px-3 py-1 rounded bg-gray-300 disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
       </div>
       <EmployeeDetailModal isOpen={detailOpen} onClose={() => setDetailOpen(false)} employee={selected} />
     </div>
