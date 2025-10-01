@@ -6,6 +6,7 @@ export interface Employee {
   annualSalary?: number;
   annualTax?: number;
   netAnnualSalary?: number;
+  taxBracket?: TaxBracket;
 }
 
 export interface TaxBracket {
