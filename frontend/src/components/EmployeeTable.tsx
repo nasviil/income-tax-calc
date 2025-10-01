@@ -17,6 +17,16 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
   // Sort employees by ID in descending order (newest first, ID 1 at bottom)
   const sortedEmployees = [...employees].sort((a, b) => b.id - a.id);
 
+  const formatNumber = (value: number | null | undefined) => {
+    if (value === null || value === undefined || isNaN(Number(value))) return '-';
+    const n = Number(value);
+    const fixed = n.toFixed(2); // ensures two decimals
+    const [intPart, decPart] = fixed.split('.');
+    const intFormatted = Number(intPart).toLocaleString();
+    if (decPart === '00') return intFormatted;
+    return `${intFormatted}.${decPart}`;
+  };
+
   return (
     <div className="mb-8 bg-white rounded-lg shadow-lg max-w-full mx-20">
       <div className="flex justify-between items-center px-6 py-4 bg-gray-200 border-b rounded-t-xl">
@@ -33,28 +43,23 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
       
       <div className="overflow-x-auto">
         <table className="min-w-full">
-          <thead className="bg-gray-200 ">
+          <thead className="bg-gray-200">
             <tr>
-              <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-800 uppercase">
+              <th className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-800 uppercase">
                 Name
               </th>
-              <th className="px-12 py-3 text-xs font-medium tracking-wider text-left text-gray-800 uppercase">
+              <th className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-800 uppercase">
                 Monthly Salary
               </th>
-              <th className="px-12 py-3 text-xs font-medium tracking-wider text-left text-gray-800 uppercase">
-                Annual Salary
+              <th className="py-3 text-xs font-medium tracking-wider text-left text-gray-800 uppercase">
+                Net Annual Salary
               </th>
-              <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-800 uppercase">
+              <th className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-800 uppercase">
                 Actions
               </th>
             </tr>
           </thead>
-        </table>
-
-        {/* Scrollable rows container: approximately 5 rows -> adjust max-h as needed */}
-        <div className="max-h-72 rounded-b-xl overflow-y-auto">
-          <table className="min-w-full">
-            <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-200">
               {employees.length === 0 ? (
               <tr>
                 <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
@@ -65,18 +70,20 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
             ) : (
                 sortedEmployees.map((employee) => (
                   <tr key={employee.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="py-4 px-6 text-left whitespace-nowrap">
                       <div className="font-medium text-gray-900">
                         {employee.firstName} {employee.lastName}
                       </div>
                     </td>
-                    <td className="px-12 py-4 text-gray-700 whitespace-nowrap">
-                      ₱{employee.monthlySalary.toLocaleString()}
+                    <td className=" py-4 px-6 text-left text-gray-700 whitespace-nowrap">
+                      ₱{formatNumber(employee.monthlySalary)}
                     </td>
-                    <td className="px-12 py-4 text-gray-700 whitespace-nowrap">
-                      ₱{(employee.monthlySalary * 12).toLocaleString()}
+                    <td className="py-4 px-6 text-left text-gray-700 whitespace-nowrap">
+                      ₱{formatNumber(
+                        employee.netAnnualSalary ?? (Number(employee.monthlySalary) * 12 - (employee.annualTax ?? 0))
+                      )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="py-4 px-6 text-left whitespace-nowrap">
                       <div className="flex gap-10">
                         <button
                           onClick={() => onEditEmployee(employee)}
@@ -95,9 +102,8 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
                   </tr>
                 ))
             )}
-            </tbody>
-          </table>
-        </div>
+          </tbody>
+        </table>
       </div>
     </div>
   );
