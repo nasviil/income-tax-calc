@@ -17,12 +17,13 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
   const sortedEmployees = [...employees].sort((a, b) => b.id - a.id);
 
   return (
-    <div className="mb-8 overflow-hidden bg-white rounded-lg shadow-lg">
+    <div className="mb-8 bg-white rounded-lg shadow-lg">
       <div className="px-6 py-4 bg-gray-200 border-b">
         <h2 className="text-2xl font-semibold text-black">Employees ({employees.length})</h2>
       </div>
       
       <div className="overflow-x-auto">
+        {/* Keep header fixed and make rows scrollable after ~5 items (adjust max-h if row height changes) */}
         <table className="min-w-full">
           <thead className="bg-gray-200 ">
             <tr>
@@ -40,8 +41,13 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {employees.length === 0 ? (
+        </table>
+
+        {/* Scrollable rows container: approximately 5 rows -> adjust max-h as needed */}
+        <div className="max-h-72 overflow-y-auto">
+          <table className="min-w-full">
+            <tbody className="bg-white divide-y divide-gray-200">
+              {employees.length === 0 ? (
               <tr>
                 <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
                   <div className="text-lg">No employees found</div>
@@ -49,40 +55,41 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
                 </td>
               </tr>
             ) : (
-              sortedEmployees.map((employee) => (
-                <tr key={employee.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="font-medium text-gray-900">
-                      {employee.firstName} {employee.lastName}
-                    </div>
-                  </td>
-                  <td className="px-12 py-4 text-gray-700 whitespace-nowrap">
-                    ₱{employee.monthlySalary.toLocaleString()}
-                  </td>
-                  <td className="px-12 py-4 text-gray-700 whitespace-nowrap">
-                    ₱{(employee.monthlySalary * 12).toLocaleString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex gap-10">
-                      <button
-                        onClick={() => onEditEmployee(employee)}
-                        className="font-medium text-blue-400 transition-colors hover:text-blue-600"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(employee.id, `${employee.firstName} ${employee.lastName}`)}
-                        className="font-medium text-red-400 transition-colors hover:text-red-600"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
+                sortedEmployees.map((employee) => (
+                  <tr key={employee.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="font-medium text-gray-900">
+                        {employee.firstName} {employee.lastName}
+                      </div>
+                    </td>
+                    <td className="px-12 py-4 text-gray-700 whitespace-nowrap">
+                      ₱{employee.monthlySalary.toLocaleString()}
+                    </td>
+                    <td className="px-12 py-4 text-gray-700 whitespace-nowrap">
+                      ₱{(employee.monthlySalary * 12).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex gap-10">
+                        <button
+                          onClick={() => onEditEmployee(employee)}
+                          className="font-medium text-blue-400 transition-colors hover:text-blue-600"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(employee.id, `${employee.firstName} ${employee.lastName}`)}
+                          className="font-medium text-red-400 transition-colors hover:text-red-600"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
             )}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
