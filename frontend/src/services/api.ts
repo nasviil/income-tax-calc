@@ -3,41 +3,77 @@ import { Employee, TaxBracket, TaxResult, EmployeeFormData } from '@/types';
 const API_BASE_URL = 'http://localhost:3000';
 
 export const employeeService = {
-  async getAll(): Promise<Employee[]> {
+  async getAll(page: number = 1, limit: number = 15): Promise<{ 
+    data: Employee[]; 
+    total: number; 
+    page: number; 
+    limit: number; 
+    totalPages: number; 
+  }> {
     try {
-      const response = await fetch(`${API_BASE_URL}/employees`);
+      const url = `${API_BASE_URL}/employees?page=${page}&limit=${limit}`;
+      console.log('📡 Fetching employees from:', url);
+      const response = await fetch(url);
       if (!response.ok) throw new Error('Failed to fetch employees');
-      return await response.json();
+      const result = await response.json();
+      console.log('📥 API Response:', result);
+      return result;
     } catch (error) {
       console.error('Error fetching employees:', error);
-      return []; // Return empty array for now
+      return { data: [], total: 0, page: 1, limit: 15, totalPages: 0 };
     }
   },
 
   async create(employeeData: Omit<Employee, 'id'>): Promise<Employee> {
-    const response = await fetch(`${API_BASE_URL}/employees`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(employeeData),
-    });
-    
-    if (!response.ok) throw new Error('Failed to create employee');
-    return await response.json();
+    try {
+      console.log('📤 Creating employee:', employeeData);
+      const response = await fetch(`${API_BASE_URL}/employees`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(employeeData),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('❌ Create error response:', errorData);
+        throw new Error(`Failed to create employee: ${response.status} ${response.statusText}`);
+      }
+      
+      const result = await response.json();
+      console.log('✅ Employee created:', result);
+      return result;
+    } catch (error) {
+      console.error('❌ Error in create:', error);
+      throw error;
+    }
   },
 
   async update(id: number, employeeData: Omit<Employee, 'id'>): Promise<Employee> {
-    const response = await fetch(`${API_BASE_URL}/employees/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(employeeData),
-    });
-    
-    if (!response.ok) throw new Error('Failed to update employee');
-    return await response.json();
+    try {
+      console.log('📤 Updating employee:', id, employeeData);
+      const response = await fetch(`${API_BASE_URL}/employees/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(employeeData),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('❌ Update error response:', errorData);
+        throw new Error(`Failed to update employee: ${response.status} ${response.statusText}`);
+      }
+      
+      const result = await response.json();
+      console.log('✅ Employee updated:', result);
+      return result;
+    } catch (error) {
+      console.error('❌ Error in update:', error);
+      throw error;
+    }
   },
 
   async delete(id: number): Promise<void> {
