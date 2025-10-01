@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { TaxBracket } from './tax-bracket.entity';
 
 @Entity('employees')
 export class Employee {
@@ -13,6 +14,19 @@ export class Employee {
 
   @Column({ name: 'monthly_salary', type: 'decimal', precision: 12, scale: 2 })
   monthlySalary: number;
+
+  @Column({ name: 'annual_salary', type: 'decimal', precision: 14, scale: 2, nullable: true })
+  annualSalary?: number;
+
+  @Column({ name: 'annual_tax', type: 'decimal', precision: 14, scale: 2, nullable: true })
+  annualTax?: number;
+
+  @Column({ name: 'net_annual_salary', type: 'decimal', precision: 14, scale: 2, nullable: true })
+  netAnnualSalary?: number;
+
+  @ManyToOne(() => TaxBracket, { nullable: true })
+  @JoinColumn({ name: 'tax_bracket_id' })
+  taxBracket?: TaxBracket;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
