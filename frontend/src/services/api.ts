@@ -47,6 +47,16 @@ export const employeeService = {
     
     if (!response.ok) throw new Error('Failed to delete employee');
   },
+
+  async saveTaxResult(id: number, data: { annualSalary?: number; annualTax?: number; netAnnualSalary?: number }): Promise<Employee> {
+    const response = await fetch(`${API_BASE_URL}/employees/${id}/tax-result`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error('Failed to save tax result');
+    return await response.json();
+  },
 };
 
 export const taxService = {
