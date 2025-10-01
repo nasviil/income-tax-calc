@@ -28,17 +28,29 @@ export class EmployeeController {
     // Set default values
     const page = pagination.page ? Number(pagination.page) : 1;
     const limit = pagination.limit ? Number(pagination.limit) : 15;
+    const search = pagination.search?.trim();
     
     // Calculate offset
     const skip = (page - 1) * limit;
     
-    // Get employees with pagination and total count (newest first)
-    const [employees, total] = await this.employeeRepository.findAndCount({
-      relations: ['taxBracket'],
-      order: { id: 'DESC' },
-      skip,
-      take: limit
-    });
+    // Build query with search functionality
+    const queryBuilder = this.employeeRepository.createQueryBuilder('employee')
+      .leftJoinAndSelect('employee.taxBracket', 'taxBracket')
+      .orderBy('employee.id', 'DESC');
+    
+    // Add search functionality if search term is provided
+    if (search) {
+      queryBuilder.where(
+        '(LOWER(employee.firstName) LIKE LOWER(:search) OR LOWER(employee.lastName) LIKE LOWER(:search) OR LOWER(CONCAT(employee.firstName, \' \', employee.lastName)) LIKE LOWER(:search))',
+        { search: `%${search}%` }
+      );
+    }
+    
+    // Apply pagination
+    queryBuilder.skip(skip).take(limit);
+    
+    // Get employees with pagination and total count
+    const [employees, total] = await queryBuilder.getManyAndCount();
     
     const totalPages = Math.ceil(total / limit);
     
@@ -47,7 +59,8 @@ export class EmployeeController {
       total,
       page,
       limit,
-      totalPages
+      totalPages,
+      search: search || 'none'
     });
     
     return {
