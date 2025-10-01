@@ -4,9 +4,10 @@ interface EmployeeTableProps {
   employees: Employee[];
   onDeleteEmployee: (id: number) => void;
   onEditEmployee: (employee: Employee) => void;
+  onAddEmployee?: () => void;
 }
 
-export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmployee }: EmployeeTableProps) {
+export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmployee, onAddEmployee }: EmployeeTableProps) {
   const handleDelete = (employeeId: number, employeeName: string) => {
     if (confirm(`Are you sure you want to delete ${employeeName}?`)) {
       onDeleteEmployee(employeeId);
@@ -17,13 +18,20 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
   const sortedEmployees = [...employees].sort((a, b) => b.id - a.id);
 
   return (
-    <div className="mb-8 bg-white rounded-lg shadow-lg">
-      <div className="px-6 py-4 bg-gray-200 border-b">
+    <div className="mb-8 bg-white rounded-lg shadow-lg max-w-full mx-20">
+      <div className="flex justify-between items-center px-6 py-4 bg-gray-200 border-b rounded-t-xl">
         <h2 className="text-2xl font-semibold text-black">Employees ({employees.length})</h2>
+        {onAddEmployee && (
+          <button
+            onClick={onAddEmployee}
+            className="px-4 py-2 font-bold text-white transition-colors rounded-lg bg-shamrock-normal hover:bg-shamrock-normal-hover"
+          >
+            + Add Employee
+          </button>
+        )}
       </div>
       
       <div className="overflow-x-auto">
-        {/* Keep header fixed and make rows scrollable after ~5 items (adjust max-h if row height changes) */}
         <table className="min-w-full">
           <thead className="bg-gray-200 ">
             <tr>
@@ -44,7 +52,7 @@ export default function EmployeeTable({ employees, onDeleteEmployee, onEditEmplo
         </table>
 
         {/* Scrollable rows container: approximately 5 rows -> adjust max-h as needed */}
-        <div className="max-h-72 overflow-y-auto">
+        <div className="max-h-72 rounded-b-xl overflow-y-auto">
           <table className="min-w-full">
             <tbody className="bg-white divide-y divide-gray-200">
               {employees.length === 0 ? (
