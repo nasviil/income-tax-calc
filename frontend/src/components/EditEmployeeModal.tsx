@@ -122,7 +122,7 @@ export default function EditEmployeeModal({ isOpen, onClose, onSubmit, employee 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-1 bg-green-500 hover:bg-green-700 disabled:bg-green-300 text-white font-bold py-2 px-4 rounded transition-colors"
+                className="flex-1 bg-shamrock-normal hover:bg-shamrock-normal-hover disabled:bg-shamrock-light text-white font-bold py-2 px-4 rounded transition-colors"
               >
                 {isSubmitting ? 'Updating...' : 'Update Employee'}
               </button>
